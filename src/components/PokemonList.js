@@ -1,10 +1,10 @@
 import { Component } from "react";
 import Pokemon from "./Pokemon";
 
-class PokemonList extends Component({ list }) {    
+class PokemonList extends Component {    
     render() {
         return <>
-            {list.map((pokemon, index) => <>
+            {this.props.list?.map((pokemon, index) => <>
                 <Pokemon pokemon={pokemon} /> 
                 {index !== this.props.list?.length - 1 
                 ? <span className="sepatator">VS</span> 
