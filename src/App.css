@@ -28,15 +28,13 @@
 }
 
 .arena {
-  padding: 30px; 
+  padding: 130px 30px 30px; 
   display: flex;
   flex-direction: row;
   justify-content: center;
   width: 100%;
   box-sizing: border-box;
   gap: 30px;
-  position: sticky;
-  top: 100px;
 }
 
 .pokemon {
@@ -187,4 +185,8 @@
   font-size: 14px;
   border: 1px solid #dedede;
   border-radius: 6px;
+}
+
+.name {
+  font-weight: 700;
 }

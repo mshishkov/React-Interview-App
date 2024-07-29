@@ -1,10 +1,9 @@
-import React, { Component, useState } from 'react';
+import { Component } from 'react';
 import './App.css';
 import { PokemonCollection } from './models/PokemonCollection';
 import PokemonList from './components/PokemonList';
 import fetchPokemons from './api/FetchPokemons';
-import { PokemonModel } from './models/PokemonModel';
-import fetchPokemonInfo from './api/FetchPokemonInfo';
+import BattleLog from './components/BattleLog';
 
 interface AppState {
   isLoading?: boolean;
@@ -65,10 +64,17 @@ class App extends Component<AppState> {
     let simulation = [];
   
     if (fighters?.list) {
-      let figtersNames = fighters.list.map(pokemon => pokemon.name.toUpperCase());
+       let figtersNames =fighters.list.map(pokemon => pokemon.name[0].toUpperCase() + pokemon.name.substring(1));
       simulation.push(figtersNames.join(' and ') + ' joined the battle.');
 
-      let sorted = fighters.list.sort((a, b) => {
+      let sorted = Object.assign(new Array, fighters.list);
+
+      sorted.map(pokemon => {
+        pokemon.name = pokemon.name.split(' ').map((part: string) =>  part[0].toUpperCase() + part.substring(1)).join(' ');
+        simulation.push(`Pokemon: ${pokemon.name} deals ${pokemon.move?.power} damage, having ${pokemon.health} of health`);
+      });
+
+      sorted.sort((a, b) => {
         return a.move && b.move ? (
           b.move.power > a.move.power ? 1 : (b.move.power < a.move.power ? -1 : (
             b.health && a.health ? (b.health > a.health ? 1 : (b.health < a.health ? -1 : 0)) : 0
@@ -87,7 +93,7 @@ class App extends Component<AppState> {
 
   render() {
     const {isLoading, error, fighters, battaleLog } = this.state;
-    
+
     return <>{
       isLoading 
       ? ('Updating Pokemons database....')
@@ -100,13 +106,7 @@ class App extends Component<AppState> {
                 <PokemonList list={ fighters?.list } />
               </div>
               <div className='button' onClick={ this.simulate }>Simulate battle</div>
-              {
-                battaleLog
-                ? <><div className='battle-logs'>{
-                      battaleLog.map(row => <div className='row'>-{row}</div>)
-                    }</div></>
-                : <></>
-              }
+              { battaleLog ? <BattleLog list={battaleLog} /> : null }
             </div>
           )
     }</>

@@ -25,7 +25,7 @@ const fetchPokemonInfo = async (id: number) => {
     
     return new PokemonModel(
         id,
-        response.data.name,
+        response.data.name.split('-').join(' '),
         response.data.sprites?.front_default,
         health,
         strongestMove
