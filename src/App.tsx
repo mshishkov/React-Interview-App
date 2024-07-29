@@ -18,17 +18,6 @@ class App extends Component<AppState> {
     isLoading: true
   };
 
-  constructor(props: any) {
-    super(props);
-
-    this.setState({
-      isLoading: true,
-      error: null,
-      collection: new PokemonCollection(),
-      fighters: new PokemonCollection()
-    });
-  }
-
   componentDidMount() {
     this.fetchData();
   }
