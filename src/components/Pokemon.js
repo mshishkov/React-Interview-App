@@ -1,34 +1,16 @@
-import React, { Component } from "react";
-import fetchPokemonInfo from "../api/FetchPokemonInfo";
-import { PokemonModel } from "../models/PokemonModel";
+import { Component } from "react";
 
 class Pokemon extends Component {    
     constructor(props) {
         super(props);
 
         this.state = {
-            pokemon: null
+            pokemon: props.pokemon
         }
     }
     
-    componentDidMount() {
-        fetchPokemonInfo(this.props.pokemon?.id)
-            .then(info => {
-                this.setState({
-                    pokemon: new PokemonModel(
-                        info.id,
-                        info.name.split('-').join(' '),
-                        info.image,
-                        info.health,
-                        info.move 
-                    )
-                })
-            });
-    }
-    
-    
     render() {
-        const pokemon = this.state.pokemon;
+        const {pokemon} = this.state;
 
         return <>
             <div className="pokemon" key={pokemon?.id}>{

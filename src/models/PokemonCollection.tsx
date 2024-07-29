@@ -18,21 +18,6 @@ export class PokemonCollection {
         }
     }
 
-    updateInfo = async (pokemon: PokemonModel) => {
-        await fetchPokemonInfo(pokemon.id)
-            .then(info => {
-                pokemon = new PokemonModel(
-                    info.id,
-                    info.name.split('-').join(' '),
-                    info.image,
-                    info.health,
-                    info.move 
-                )
-            });
-
-        return pokemon;
-    }
-
     get total () {
         return this.list ? this.list.length : 0;
     }
@@ -43,10 +28,7 @@ export class PokemonCollection {
         }
 
         let i = Math.floor(Math.random() * this.total);
-        let pokemonId = this.list[i].id;
-
-        let randomPokemon = this.list[i];
-
-        return randomPokemon;
+        
+        return fetchPokemonInfo(this.list[i].id);
     }
 }

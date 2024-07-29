@@ -37,23 +37,20 @@ class App extends Component<AppState> {
   fetchData = async () => {
     fetchPokemons()
     .then((pokemons) => {
+      this.setState({
+        collection: pokemons,
+        isLoading: false
+      });
+
       let fightersCollection = new PokemonCollection();
       for(let i = 1; i <= 2; i++) {
-        fightersCollection.add(pokemons.randomPokemon);
-      }
-
-      fightersCollection.list?.map(pokemon => {
-        return fightersCollection.updateInfo(pokemon);
-      })
-
-      console.log(fightersCollection);
-      
-
-      this.setState({
-        isLoading: false,
-        collection: pokemons,
-        fighters: fightersCollection
-      }, this.updateFightersInfo);
+        pokemons.randomPokemon?.then(pokemon => fightersCollection.add(pokemon))
+          .then(() => {           
+            this.setState({
+              fighters: fightersCollection
+            });
+          });
+      }      
     })
     .catch((error) => {
       this.setState({
@@ -63,18 +60,10 @@ class App extends Component<AppState> {
     });
   }
 
-  updateFightersInfo = () => {
-    const { fighters } = this.state;
-
-    if (fighters) {
-      
-    }
-  }
-
   simulate = () => {
     const { fighters } = this.state;
     let simulation = [];
-
+  
     if (fighters?.list) {
       let figtersNames = fighters.list.map(pokemon => pokemon.name.toUpperCase());
       simulation.push(figtersNames.join(' and ') + ' joined the battle.');
@@ -98,7 +87,7 @@ class App extends Component<AppState> {
 
   render() {
     const {isLoading, error, fighters, battaleLog } = this.state;
-
+    
     return <>{
       isLoading 
       ? ('Updating Pokemons database....')
