@@ -4,7 +4,7 @@ class Pokemon extends Component {
     render() {
         const {pokemon} = this.props;
         
-        return 
+        return <>
             <div className="pokemon" key={pokemon?.id}>{
                 <div className="wrapper">
                     <div className="title">{
@@ -32,6 +32,7 @@ class Pokemon extends Component {
                     }</div>
                 </div>        
             }</div>
+        </> 
     }   
 }
 
