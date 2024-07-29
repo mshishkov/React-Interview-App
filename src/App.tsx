@@ -1,26 +1,127 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { Component, useState } from 'react';
 import './App.css';
+import { PokemonCollection } from './models/PokemonCollection';
+import PokemonList from './components/PokemonList';
+import fetchPokemons from './api/FetchPokemons';
+import { PokemonModel } from './models/PokemonModel';
+import fetchPokemonInfo from './api/FetchPokemonInfo';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+interface AppState {
+  isLoading?: boolean;
+  error?: string;
+  collection?: PokemonCollection;
+  fighters?: PokemonCollection;
+  battaleLog?: [],
+}
+
+class App extends Component<AppState> {
+  state: AppState = {
+    isLoading: true
+  };
+
+  constructor(props: any) {
+    super(props);
+
+    this.setState({
+      isLoading: true,
+      error: null,
+      collection: new PokemonCollection(),
+      fighters: new PokemonCollection()
+    });
+  }
+
+  componentDidMount() {
+    this.fetchData();
+  }
+
+  fetchData = async () => {
+    fetchPokemons()
+    .then((pokemons) => {
+      let fightersCollection = new PokemonCollection();
+      for(let i = 1; i <= 2; i++) {
+        fightersCollection.add(pokemons.randomPokemon);
+      }
+
+      fightersCollection.list?.map(pokemon => {
+        return fightersCollection.updateInfo(pokemon);
+      })
+
+      console.log(fightersCollection);
+      
+
+      this.setState({
+        isLoading: false,
+        collection: pokemons,
+        fighters: fightersCollection
+      }, this.updateFightersInfo);
+    })
+    .catch((error) => {
+      this.setState({
+        isLoading: false,
+        error: error
+      });
+    });
+  }
+
+  updateFightersInfo = () => {
+    const { fighters } = this.state;
+
+    if (fighters) {
+      
+    }
+  }
+
+  simulate = () => {
+    const { fighters } = this.state;
+    let simulation = [];
+
+    if (fighters?.list) {
+      let figtersNames = fighters.list.map(pokemon => pokemon.name.toUpperCase());
+      simulation.push(figtersNames.join(' and ') + ' joined the battle.');
+
+      let sorted = fighters.list.sort((a, b) => {
+        return a.move && b.move ? (
+          b.move.power > a.move.power ? 1 : (b.move.power < a.move.power ? -1 : (
+            b.health && a.health ? (b.health > a.health ? 1 : (b.health < a.health ? -1 : 0)) : 0
+          ))
+        ) : 0;
+      });
+
+      let hardestHitter = sorted ? sorted[0] : null;
+      simulation.push(`Hardest hitter: ${hardestHitter?.name}`)
+    }
+
+    this.setState({
+      battaleLog: simulation
+    });
+  }
+
+  render() {
+    const {isLoading, error, fighters, battaleLog } = this.state;
+
+    return <>{
+      isLoading 
+      ? ('Updating Pokemons database....')
+      :  error 
+          ? error
+          : (
+            <div className='app-wrapper'>
+              <div className='header'>Pokemons Battle Simulator</div>
+              <div className='arena'>
+                <PokemonList list={ fighters?.list } />
+              </div>
+              <div className='button' onClick={ this.simulate }>Simulate battle</div>
+              {
+                battaleLog
+                ? <><div className='battle-logs'>{
+                      battaleLog.map(row => <div className='row'>-{row}</div>)
+                    }</div></>
+                : <></>
+              }
+            </div>
+          )
+    }</>
+  }
 }
 
 export default App;
