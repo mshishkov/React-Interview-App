@@ -37,7 +37,7 @@ class App extends Component<AppState> {
     .catch((error) => {
       this.setState({
         isLoading: false,
-        error: error
+        error: error.message
       });
     });
   }
@@ -46,7 +46,6 @@ class App extends Component<AppState> {
     const { fighters } = this.state;
     let simulation = [];
 
-  
     if (!fighters?.list) {
       simulation.push('No pokemons for the fight');
 
@@ -103,7 +102,6 @@ class App extends Component<AppState> {
                     : <div className='button' onClick={ this.simulateBattle }>Start Battle</div>
                     }
                     <div className='button button-default' onClick={ this.fetchData }>Generate new opponents</div>
-                    <br />
                 </>
               ) : null }
           </div>

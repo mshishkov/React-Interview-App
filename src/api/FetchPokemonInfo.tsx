@@ -13,16 +13,20 @@ const fetchPokemonInfo = async (id: number, url?: string) => {
     )[0].base_stat;
 
     const movesCount = response.data.moves.length;
-    const randomMove = Math.floor(Math.random() * (movesCount - 1));
-    const moveResponse = await axios.get(response.data.moves[randomMove].move.url);
-
-    const move = new MoveModel(
-        moveResponse.data.name
-            .split('-')
-            .map((part: string ) => part[0].toUpperCase() + part.substring(1) )
-            .join(' '),
-        moveResponse.data.power
-    );
+    let move;
+    if (movesCount > 0) {
+        const randomMove = Math.floor(Math.random() * (movesCount - 1));
+        const moveResponse = await axios.get(response.data.moves[randomMove].move.url);
+        move = new MoveModel(
+            moveResponse.data.name
+                .split('-')
+                .map((part: string ) => part[0].toUpperCase() + part.substring(1) )
+                .join(' '),
+            moveResponse.data.power
+        );
+    } else {
+        move = new MoveModel('Unknown', 0);
+    }    
 
     return new PokemonModel(
         id,

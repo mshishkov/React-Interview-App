@@ -19,7 +19,7 @@ function Pokemon(props: { pokemon?: PokemonModel; }) {
                     : <div className="loader"></div>
                 }</div>
                 <div className="move">{
-                    pokemon.move
+                    pokemon && pokemon.move
                     ? <>
                         <span className="title">Attack </span>
                         <span className="name">{pokemon.move.name}:</span> 

@@ -1,10 +1,8 @@
 import axios from "axios";
 import fetchPokemonInfo from "./FetchPokemonInfo";
 
-const baseUrl = 'https://pokeapi.co/api/v2/pokemon/';
-
 const fetchPokemons = async (countNeeded?: number) => {
-    const countResponse = await axios(`${baseUrl}?limit=-1`);
+    const countResponse = await axios('https://pokeapi.co/api/v2/pokemon/?limit=-1');
     if (!countResponse.data) {
         throw new Error('Network response was not ok.');
     }

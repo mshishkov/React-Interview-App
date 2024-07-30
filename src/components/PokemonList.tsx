@@ -9,7 +9,7 @@ function PokemonList(props: { list?: Array<PokemonModel>; }) {
     }
 
     return <>{list.map((pokemon, index) => <>
-        <Pokemon pokemon={pokemon} /> 
+        <Pokemon pokemon={pokemon} key={index}/> 
         {index < list.length - 1 ? <span className="sepatator">VS</span> : null}
         </>
     )}</>
