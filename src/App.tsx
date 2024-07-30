@@ -45,31 +45,40 @@ class App extends Component<AppState> {
   simulateBattle = () => {
     const { fighters } = this.state;
     let simulation = [];
+
   
-    if (fighters?.list) {
-       let figtersNames =fighters.list.map(pokemon => pokemon.name[0].toUpperCase() + pokemon.name.substring(1));
-      simulation.push(figtersNames.join(' and ') + ' joined the battle.');
+    if (!fighters?.list) {
+      simulation.push('No pokemons for the fight');
 
-      let sorted = Object.assign(new Array, fighters.list);
-
-      sorted.map(pokemon => {
-        pokemon.name = pokemon.name.split(' ').map((part: string) =>  part[0].toUpperCase() + part.substring(1)).join(' ');
-        simulation.push(`Attack: <${pokemon.name}> dealed <${pokemon.move?.power}> damage, having <${pokemon.health}> of health`);
+      this.setState({
+        battaleLog: simulation
       });
 
-      sorted.sort((a, b) => {
-        return a.move && b.move ? (
-          b.move.power > a.move.power ? 1 : (b.move.power < a.move.power ? -1 : (
-            b.health && a.health ? (b.health > a.health ? 1 : (b.health < a.health ? -1 : 0)) : 0
-          ))
-        ) : 0;
-      });
-
-      let hardestHitter = sorted ? sorted[0] : null;
-      let weakestHitter = sorted ? sorted[sorted.length - 1] : null;
-
-      simulation.push(`<${hardestHitter?.name}> lands a decisive blow with <${hardestHitter?.move.name}> knocking out <${weakestHitter?.name}>!`)
+      return;
     }
+
+    let figtersNames =fighters.list.map(pokemon => pokemon.name[0].toUpperCase() + pokemon.name.substring(1));
+    simulation.push(figtersNames.join(' and ') + ' joined the battle.');
+
+    let sorted = Object.assign(new Array, fighters.list);
+
+    sorted.map(pokemon => {
+      pokemon.name = pokemon.name.split(' ').map((part: string) =>  part[0].toUpperCase() + part.substring(1)).join(' ');
+      simulation.push(`Attack: <${pokemon.name}> dealed <${pokemon.move?.power}> damage, having <${pokemon.health}> of health`);
+    });
+
+    sorted.sort((a, b) => {
+      return a.move && b.move ? (
+        b.move.power > a.move.power ? 1 : (b.move.power < a.move.power ? -1 : (
+          b.health && a.health ? (b.health > a.health ? 1 : (b.health < a.health ? -1 : 0)) : 0
+        ))
+      ) : 0;
+    });
+
+    let hardestHitter = sorted ? sorted[0] : null;
+    let weakestHitter = sorted ? sorted[sorted.length - 1] : null;
+
+    simulation.push(`<${hardestHitter?.name}> lands a decisive blow with <${hardestHitter?.move.name}> knocking out <${weakestHitter?.name}>!`);
 
     this.setState({
       battaleLog: simulation

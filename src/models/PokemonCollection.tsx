@@ -6,14 +6,4 @@ export class PokemonCollection {
     constructor(list?: Array<PokemonModel>) {
         this.list = list;
     }
-
-    add(pokemon?: PokemonModel) {
-        if (!this.list) {
-            this.list = new Array;
-        }
-
-        if (pokemon) {
-            this.list.push(pokemon);
-        }
-    }
 }
