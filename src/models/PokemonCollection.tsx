@@ -1,4 +1,3 @@
-import fetchPokemonInfo from "../api/FetchPokemonInfo";
 import { PokemonModel } from "./PokemonModel";
 
 export class PokemonCollection {
@@ -10,25 +9,11 @@ export class PokemonCollection {
 
     add(pokemon?: PokemonModel) {
         if (!this.list) {
-            this.list = [];
+            this.list = new Array;
         }
 
         if (pokemon) {
             this.list.push(pokemon);
         }
-    }
-
-    get total () {
-        return this.list ? this.list.length : 0;
-    }
-
-    get randomPokemon() {
-        if (!this.list) {
-            return;
-        }
-
-        let i = Math.floor(Math.random() * this.total);
-        
-        return fetchPokemonInfo(this.list[i].id);
     }
 }

@@ -1,25 +1,24 @@
 import axios from "axios";
-import { PokemonModel } from "../models/PokemonModel";
-import { PokemonCollection } from "../models/PokemonCollection";
+import fetchPokemonInfo from "./FetchPokemonInfo";
 
 const baseUrl = 'https://pokeapi.co/api/v2/pokemon/';
 
-const fetchPokemons = async () => {
-    const response = await axios(baseUrl + '?limit=-1');
-
-    if (!response.data) {
+const fetchPokemons = async (countNeeded?: number) => {
+    const countResponse = await axios(`${baseUrl}?limit=-1`);
+    if (!countResponse.data) {
         throw new Error('Network response was not ok.');
     }
 
-    return new PokemonCollection(response.data.results.map((pokemon: {
-        name: string;
-        url: string;
-    }) => {
-        let id = parseInt(pokemon.url.replace(baseUrl, '').replace('/', ''));
-        let name = pokemon?.name.split('-').join(' ');
-        
-        return new PokemonModel(id, name);
-    }));
+    countNeeded = countNeeded ? countNeeded : 2;
+    const list = countResponse.data.results;
+    const count = countResponse.data.count;
+
+    let randomIds = [];
+    for (let i = 0; i < countNeeded; i++) {
+        randomIds.push(Math.floor(Math.random() * (count - 1)));
+    }
+
+    return Promise.all(randomIds.map((id) => fetchPokemonInfo(id, list[id].url)));
 };
 
 export default fetchPokemons;

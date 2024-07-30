@@ -2,8 +2,8 @@ import axios from "axios";
 import { PokemonModel } from "../models/PokemonModel";
 import { MoveModel } from "../models/MoveModel";
 
-const fetchPokemonInfo = async (id: number) => {
-    const response = await axios(`https://pokeapi.co/api/v2/pokemon/${id}`);
+const fetchPokemonInfo = async (id: number, url?: string) => {
+    const response = await axios(url ? url : `https://pokeapi.co/api/v2/pokemon/${id}`);
     if (!response.data) {
         throw new Error('Network response was not ok.');
     }
@@ -12,23 +12,24 @@ const fetchPokemonInfo = async (id: number) => {
         (statItem: { stat: { name: string; }; }) => statItem.stat.name === 'hp'
     )[0].base_stat;
 
-    let strongestMove = new MoveModel('', 0);
+    const movesCount = response.data.moves.length;
+    const randomMove = Math.floor(Math.random() * (movesCount - 1));
+    const moveResponse = await axios.get(response.data.moves[randomMove].move.url);
 
-    for(let i in response.data.moves) {
-        let move = await axios.get(response.data.moves[i].move.url);
+    const move = new MoveModel(
+        moveResponse.data.name
+            .split('-')
+            .map((part: string ) => part[0].toUpperCase() + part.substring(1) )
+            .join(' '),
+        moveResponse.data.power
+    );
 
-        if (strongestMove.power < move.data.power) {
-            strongestMove.power = move.data.power;
-            strongestMove.name = move.data.name.split('-').join(' ');
-        }
-    }
-    
     return new PokemonModel(
         id,
         response.data.name.split('-').join(' '),
         response.data.sprites?.front_default,
         health,
-        strongestMove
+        move
     );
 };
 

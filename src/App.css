@@ -31,10 +31,17 @@
   padding: 130px 30px 30px; 
   display: flex;
   flex-direction: row;
+  flex-wrap: wrap;
   justify-content: center;
   width: 100%;
   box-sizing: border-box;
   gap: 30px;
+}
+@media screen and (max-width: 640px) {
+  .arena {
+    flex-direction: column;
+    align-items: center;
+  }
 }
 
 .pokemon {
@@ -46,7 +53,7 @@
   border-radius: 8px;
 }
 
-.pokemon .title {
+.pokemon .wrapper > .title {
   height: 32px;
   display: flex;
   flex-direction: row;
@@ -54,7 +61,7 @@
   background: #dedede;
 }
 
-.pokemon .title span {
+.pokemon .wrapper > .title span {
   flex-grow: 1;
   height: 100%;
   display: flex;
@@ -66,16 +73,17 @@
   line-height: 1em;
 }
 
-.pokemon .title span.hp {
+.pokemon .wrapper > .title span.hp {
   background: #ffffff;
   flex-grow: 0;
   flex-shrink: 0;
-  width: 32px;
+  width: 55px;
   height: 32px;
   border: 1px solid #dedede;
   justify-content: center;
   font-weight: 700;
   border-radius: 4px;
+  font-size: 14px;
 }
 
 .pokemon .image {
@@ -101,13 +109,23 @@
   text-transform: capitalize;
   padding: 10px;
   font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  flex-wrap: wrap;
+  background: #fff;
 }
 
 .pokemon .move .power {
   font-size: 1.2em;
   font-weight: 500;
-  margin-left: 5px;
+  margin-left: auto;
 }
+.pokemon .move .title {
+  width: 100%;
+  border-bottom: 1px solid #dedede;
+}
+
 
 .arena .sepatator {
   display: flex;
@@ -168,23 +186,38 @@
   border-radius: 6px;
   box-shadow: 0 0 8px -4px rgba(47,47,47,0.2);
   padding: 10px;
+  margin: 8px;
   transition: all 0.2s ease-in-out;
 }
-
 .button:hover {
   box-shadow: 0 0 0 1px rgba(47,47,47,0.2);
+}
+.button-default {
+  background: #d6d6d6;
 }
 
 .battle-logs {
   margin: 10px;
   padding: 15px;
   width: 100%;
-  max-width: 480px;
+  max-width: 640px;
   box-sizing: border-box;
   background: #ffffff;
   font-size: 14px;
   border: 1px solid #dedede;
   border-radius: 6px;
+}
+
+.battle-logs .row {
+  margin-bottom: 5px;
+}
+
+.battle-logs .title {
+  width: 100%;
+  border-bottom: 1px solid #dedede;
+  padding: 5px;
+  margin-bottom: 10px;
+  box-sizing: border-box;
 }
 
 .name {

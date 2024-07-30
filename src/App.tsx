@@ -8,7 +8,6 @@ import BattleLog from './components/BattleLog';
 interface AppState {
   isLoading?: boolean;
   error?: string;
-  collection?: PokemonCollection;
   fighters?: PokemonCollection;
   battaleLog?: [],
 }
@@ -22,23 +21,18 @@ class App extends Component<AppState> {
     this.fetchData();
   }
 
-  fetchData = async () => {
-    fetchPokemons()
-    .then((pokemons) => {
-      this.setState({
-        collection: pokemons,
-        isLoading: false
-      });
+  fetchData = () => {
+    this.setState({
+      isLoading: true
+    });
 
-      let fightersCollection = new PokemonCollection();
-      for(let i = 1; i <= 2; i++) {
-        pokemons.randomPokemon?.then(pokemon => fightersCollection.add(pokemon))
-          .then(() => {           
-            this.setState({
-              fighters: fightersCollection
-            });
-          });
-      }      
+    fetchPokemons()
+      .then((pokemons) => {
+        this.setState({
+          fighters: new PokemonCollection(pokemons),
+          isLoading: false,
+          battaleLog: null
+        }); 
     })
     .catch((error) => {
       this.setState({
@@ -48,7 +42,7 @@ class App extends Component<AppState> {
     });
   }
 
-  simulate = () => {
+  simulateBattle = () => {
     const { fighters } = this.state;
     let simulation = [];
   
@@ -60,7 +54,7 @@ class App extends Component<AppState> {
 
       sorted.map(pokemon => {
         pokemon.name = pokemon.name.split(' ').map((part: string) =>  part[0].toUpperCase() + part.substring(1)).join(' ');
-        simulation.push(`Pokemon: ${pokemon.name} deals ${pokemon.move?.power} damage, having ${pokemon.health} of health`);
+        simulation.push(`Attack: <${pokemon.name}> dealed <${pokemon.move?.power}> damage, having <${pokemon.health}> of health`);
       });
 
       sorted.sort((a, b) => {
@@ -72,7 +66,9 @@ class App extends Component<AppState> {
       });
 
       let hardestHitter = sorted ? sorted[0] : null;
-      simulation.push(`Hardest hitter: ${hardestHitter?.name}`)
+      let weakestHitter = sorted ? sorted[sorted.length - 1] : null;
+
+      simulation.push(`<${hardestHitter?.name}> lands a decisive blow with <${hardestHitter?.move.name}> knocking out <${weakestHitter?.name}>!`)
     }
 
     this.setState({
@@ -83,22 +79,25 @@ class App extends Component<AppState> {
   render() {
     const {isLoading, error, fighters, battaleLog } = this.state;
 
-    return <>{
-      isLoading 
-      ? ('Updating Pokemons database....')
-      :  error 
-          ? error
-          : (
-            <div className='app-wrapper'>
+    return <div className='app-wrapper'>
               <div className='header'>Pokemons Battle Simulator</div>
-              <div className='arena'>
-                <PokemonList list={ fighters?.list } />
-              </div>
-              <div className='button' onClick={ this.simulate }>Simulate battle</div>
-              { battaleLog ? <BattleLog list={battaleLog} /> : null }
-            </div>
-          )
-    }</>
+              <div className='arena'>{
+                  isLoading 
+                  ? <div className='loader'></div>
+                  : (error ? error : <PokemonList list={ fighters?.list } />) 
+              }</div>
+              { !isLoading ? (<>
+                    {battaleLog 
+                    ? (<>
+                        <BattleLog list={battaleLog} />
+                      </>) 
+                    : <div className='button' onClick={ this.simulateBattle }>Start Battle</div>
+                    }
+                    <div className='button button-default' onClick={ this.fetchData }>Generate new opponents</div>
+                    <br />
+                </>
+              ) : null }
+          </div>
   }
 }
 

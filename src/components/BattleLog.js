@@ -1,15 +1,12 @@
 import React from "react";
 
-class BattleLog extends React.Component {    
-    render() {
-        return <div className="battle-logs">
-            {this.props.list?.map((row, index) => <>
-                <div className="row">
-                    - {row}
-                </div>
-            </>)}
-        </div>
-    }   
+function BattleLog(props) {
+    const { list } = props;
+
+    return <div className="battle-logs">
+        <div className="title">Battle Log</div>
+        { list.map((row, index) => <div className="row" key={index}>- {row}</div>) }
+    </div>   
 }
 
 export default BattleLog;
