@@ -77,7 +77,11 @@ class App extends Component<AppState> {
     let hardestHitter = sorted ? sorted[0] : null;
     let weakestHitter = sorted ? sorted[sorted.length - 1] : null;
 
-    simulation.push(`<${hardestHitter?.name}> lands a decisive blow with <${hardestHitter?.move.name}> knocking out <${weakestHitter?.name}>!`);
+    if (hardestHitter.move.power === weakestHitter.move.power && hardestHitter.health === weakestHitter.health) {
+      simulation.push(`Draw game!`);
+    } else {
+      simulation.push(`<${hardestHitter?.name}> lands a decisive blow with <${hardestHitter?.move.name}> knocking out <${weakestHitter?.name}>!`);
+    }    
 
     this.setState({
       battaleLog: simulation
