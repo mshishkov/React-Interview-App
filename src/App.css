@@ -50,15 +50,18 @@
   display: flex;
   flex-direction: column;
   border: 1px solid #dedede;
-  border-radius: 8px;
+  border-radius: 15px;
+  padding: 12px;
+  box-sizing: border-box;
+  background: whitesmoke;
 }
-
 .pokemon .wrapper > .title {
   height: 32px;
   display: flex;
   flex-direction: row;
   padding: 8px;
   background: #dedede;
+  position: relative;
 }
 
 .pokemon .wrapper > .title span {
@@ -74,17 +77,62 @@
 }
 
 .pokemon .wrapper > .title span.hp {
-  background: #ffffff;
   flex-grow: 0;
   flex-shrink: 0;
-  width: 55px;
   height: 32px;
-  border: 1px solid #dedede;
   justify-content: center;
+  align-items: center;
   font-weight: 700;
   border-radius: 4px;
   font-size: 14px;
+  line-height: 1em;
 }
+
+.pokemon .wrapper > .title span.hp .health {
+  display: flex;
+  align-items: flex-end;
+  height: 16px;
+  font-size: 16px;
+  font-weight: 700;
+}
+.pokemon .wrapper > .title span.hp small {
+  display: flex;
+  align-items: flex-end;
+  height: 16px;
+  font-size: 10px;
+  font-weight: 500;
+}
+
+.pokemon .title img {
+  width: 16px;
+  height: 16px;
+  position: relative;
+  border-radius: 30px;
+  background: #9ea1a0;
+  padding: 3px;
+  margin: 0 0 0 3px;
+  box-sizing: border-box;
+}
+
+.pokemon.normal, .pokemon.normal .title img { background: #A8A77A; }
+.pokemon.fire, .pokemon.fire .title img { background: #EE8130; }
+.pokemon.water, .pokemon.water .title img { background: #6390F0; }
+.pokemon.electric, .pokemon.electric .title img { background: #F7D02C; }
+.pokemon.grass, .pokemon.grass .title img { background: #7AC74C; }
+.pokemon.ice, .pokemon.ice .title img { background: #96D9D6; }
+.pokemon.fighting, .pokemon.fighting .title img { background: #C22E28; }
+.pokemon.poison, .pokemon.poison .title img { background: #A33EA1; }
+.pokemon.ground, .pokemon.ground .title img { background: #E2BF65; }
+.pokemon.flying, .pokemon.flying .title img { background: #A98FF3; }
+.pokemon.psychic, .pokemon.psychic .title img { background: #F95587; }
+.pokemon.bug, .pokemon.bug .title img { background: #A6B91A; }
+.pokemon.rock, .pokemon.rock .title img { background: #B6A136; }
+.pokemon.ghost, .pokemon.ghost .title img { background: #735797; }
+.pokemon.dragon, .pokemon.dragon .title img { background: #6F35FC; }
+.pokemon.dark, .pokemon.dark .title img { background: #705746; }
+.pokemon.steel, .pokemon.steel .title img { background: #B7B7CE; }
+.pokemon.fairy, .pokemon.fairy .title img { background: #D685AD; }
+
 
 .pokemon .image {
   background: #ffffff;
@@ -96,7 +144,9 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  position: relative;
 }
+
 .pokemon .image img{
   width: 120px;
   height: 120px;

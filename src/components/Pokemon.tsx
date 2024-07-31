@@ -1,21 +1,25 @@
 import { PokemonModel } from "../models/PokemonModel";
 
-function Pokemon(props: { pokemon?: PokemonModel; }) {  
-    const { pokemon } = props;
-
+function Pokemon({ pokemon, showVS }: { pokemon?: PokemonModel; showVS?: boolean}) {  
     if (!pokemon) {
         return <></>
     }
 
-    return <div className="pokemon" key={pokemon.id}>
+    return <div className={pokemon.type.name + ' pokemon'} key={pokemon.id} >
             <div className="wrapper">
                 <div className="title">
                     <span className="name">{pokemon.name}</span>
-                    <span className="hp">HP{pokemon.health}</span>
+                    <span className="hp">
+                        <small>HP</small>
+                        <span className="health">{pokemon.health}</span>
+                        <img src={pokemon.type.image} alt={pokemon.type.name} />
+                    </span>
                 </div>
                 <div className="image">{
                     pokemon.image
-                    ? <img src={pokemon.image} alt={pokemon.name} /> 
+                    ? <>
+                        <img src={pokemon.image} alt={pokemon.name} />
+                      </> 
                     : <div className="loader"></div>
                 }</div>
                 <div className="move">{
